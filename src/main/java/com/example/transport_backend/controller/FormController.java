@@ -1,9 +1,12 @@
 package com.example.transport_backend.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.transport_backend.Repo.BusInfoRepo;
 import com.example.transport_backend.Repo.BusRouteRepo;
 import com.example.transport_backend.Repo.MessageRepo;
+import com.example.transport_backend.Repo.OrganizationRepo;
 import com.example.transport_backend.Repo.StaffRepo;
 import com.example.transport_backend.Repo.StudentRepo;
 import com.example.transport_backend.Repo.StudentReportRepository;
@@ -22,6 +26,7 @@ import com.example.transport_backend.entity.BusRoute;
 import com.example.transport_backend.entity.FormDetails;
 import com.example.transport_backend.entity.Message;
 import com.example.transport_backend.entity.MessageRequest;
+import com.example.transport_backend.entity.Organization;
 import com.example.transport_backend.entity.Staffdetail;
 import com.example.transport_backend.entity.Stop;
 import com.example.transport_backend.entity.StudentForm;
@@ -35,8 +40,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.foreign.Linker.Option;
 import java.time.LocalDateTime;
 
 
@@ -53,6 +59,9 @@ public class FormController {
 	StaffRepo Staffrepo;
 	
 	@Autowired
+	OrganizationRepo OrgRepo;
+	
+	@Autowired
 	MessageRepo messagerepo;
 	
     @Autowired
@@ -63,6 +72,12 @@ public class FormController {
     
     @Autowired
  MessageRepo messageRepository;
+    
+    @Value("${admin.email}")
+    private String adminEmail;
+
+    @Value("${admin.password}")
+    private String adminPassword;
 
 
 	@PostMapping("/Savebusdetails")
@@ -120,58 +135,273 @@ public class FormController {
 		return ("student details ....");
 	}
 
-	@PostMapping("/logdetails")
-	 public String logdt(@RequestParam String domain,
-            @RequestParam String email,
-            @RequestParam String password) {
+	
+	@PostMapping("/saveStudent")
+	public ResponseEntity<Map<String,Object>> saveStudent(@RequestBody StudentForm std){
+		Map<String,Object> response=new HashMap<>();
+		try {
+			StdRepo.save(std);
+		}catch(Error e) {
+			response.put("error",e);
+			return ResponseEntity.badRequest().body(response);
+		}
+	     String name=std.getFirstname()+" "+std.getLastname();
+		response.put("status", "success");
+		response.put("context", "Hello "+name+" Your Registration is Successfull , Please be wait your mentor grand the access once they reviewed details , You Will be notify through Whatsapp !!!" );
+		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/saveStaff")
+	public ResponseEntity<Map<String,Object>> saveStaff(@RequestBody Staffdetail staff){
+		Map<String,Object> response=new HashMap<>();
+		try {
+			Staffrepo.save(staff);
+		}catch(Error e) {
+			response.put("error",e);
+			return ResponseEntity.badRequest().body(response);
+		}
+	     String name=staff.getFirstname()+" "+staff.getLastname();
+		response.put("status", "success");
+		response.put("context", "Hello "+name+" Your Registration is Successfull , Please be wait your Organization grand the access once they reviewed details , You Will be notify through Whatsapp !!!" );
+		return ResponseEntity.ok(response);
+	}
+	
+	
+	@PostMapping("/saveOrganization")
+	public ResponseEntity<Map<String,Object>> saveOrganization(@RequestBody Organization org){
+		Map<String,Object> response=new HashMap<>();
+		try {
+			OrgRepo.save(org);
+		}catch(Error e) {
+			response.put("error",e);
+			response.put("status","failed");
+			return ResponseEntity.badRequest().body(response);
+		}
+	     String name=org.getName();
+		response.put("status", "success");
+		response.put("context", "Hello "+name+" Your Registration is Successfull , your Organization is officialy registed to this platform , Welcome To Route X " );
+		return ResponseEntity.ok(response);
+	}
+	
+	
+	
+	@PostMapping("signInDetails")
+	public ResponseEntity<Map<String,Object>> verify_login(@RequestParam String domain,
+         @RequestParam String email,
+          @RequestParam String password){
+		 Map<String, Object> response = new HashMap<>();
+		 
+		 
+		 if("student".equalsIgnoreCase(domain)) {
+			  Optional<StudentForm> stdDetails = StdRepo.findByEmail(email);
 
-		Optional<StudentForm> DetailOpt = null;
-		Optional<Staffdetail> StaffOpt = null;
-			if ("user".equalsIgnoreCase(domain)) {
-				DetailOpt=StdRepo.findByEmail(email);
-				if (DetailOpt.isPresent()) {
-					StudentForm student = DetailOpt.get();
-					if(student.getStatus().equalsIgnoreCase("Approved")) {
-						if (student.getPassword().equals(password)) {
-							return "student login";
-						} else {
-							return "Invalid password";
-						}
-					}else if(student.getStatus().equalsIgnoreCase("Rejected")) {
-						return "Sorry Your Application Has Been Rejected";
-					}else {
-						return "Your Application Is Under Reviewing , Pls Be wait or Try After Sometimes Later";
-					}
-				}
-				else return "Invalid Email";
-				
+			  if(stdDetails.isEmpty()) {
+				  response.put("success", false);
+				  response.put("loggedIn", false);
+				  response.put("message","Invalid Email");
+				  return ResponseEntity.badRequest().body(response);
+			  }
+			  
+			  StudentForm student=stdDetails.get();
+			  
+			  if ("Rejected".equalsIgnoreCase(student.getStatus())) {
+
+		            response.put("success", false);
+		            response.put("loggedIn", false);
+		            response.put("message",
+		                    "Sorry Your Application Has Been Rejected");
+
+		            return ResponseEntity.badRequest().body(response);
+		        }
+
+		        if (!"Approved".equalsIgnoreCase(student.getStatus())) {
+
+		            response.put("success", false);
+		            response.put("loggedIn", false);
+		            response.put("message",
+		                    "Your Application Is Under Review");
+
+		            return ResponseEntity.badRequest().body(response);
+		        }
+
+		        if (!student.getPassword().equals(password)) {
+
+		            response.put("success", false);
+		            response.put("loggedIn", false);
+		            response.put("message", "Invalid Password");
+
+		            return ResponseEntity.badRequest().body(response);
+		        }
+
+		        response.put("success", true);
+		        response.put("role", "student");
+		        response.put("loggedIn", true);
+		        response.put("studentId", student.getSid());
+		        response.put("name", student.getFirstname()+" "+student.getLastname());
+		        response.put("email", student.getEmail());
+		        response.put("message", "Login Successful");
+
+		        return ResponseEntity.ok(response);
+		 }
+		 if("staff".equalsIgnoreCase(domain)) {
+			 Optional <Staffdetail> staffDetails = Staffrepo.findByEmail(email);
+			 
+			 if(staffDetails.isEmpty()) {
+				 response.put("success", false);
+				 response.put("loggedIn", false);
+				 response.put("message", "Invalid Email");
+				 return ResponseEntity.badRequest().body(response);
+			 }
+			 
+			 Staffdetail staffs =staffDetails.get();
+			 
+			 if("Rejected".equalsIgnoreCase(staffs.getStatus())) {
+				 response.put("success", false);
+				 response.put("loggedIn", false);
+				 response.put("message", "Sorry Your Application Has Been Rejected");
+				   return ResponseEntity.badRequest().body(response);
+			 }
+			 
+			   if (!"Approved".equalsIgnoreCase(staffs.getStatus())) {
+
+		            response.put("success", false);
+		            response.put("loggedIn", false);
+		            response.put("message",
+		                    "Your Application Is Under Review");
+
+		            return ResponseEntity.badRequest().body(response);
+		        }
+
+		        if (!staffs.getPassword().equals(password)) {
+
+		            response.put("success", false);
+		            response.put("loggedIn", false);
+		            response.put("message", "Invalid Password");
+
+		            return ResponseEntity.badRequest().body(response);
+		        }
+		       
+
+		        response.put("success", true);
+		        response.put("loggedIn", true);
+		        response.put("role", "staff");
+		        response.put("staffId", staffs.getId());
+		        response.put("name", staffs.getFirstname()+" "+staffs.getLastname());
+		        response.put("email", staffs.getEmail());
+		        response.put("message", "Login Successful");
+
+		        return ResponseEntity.ok(response);
+		 }
+		 if("organization".equalsIgnoreCase(domain)) {
+			 Optional <Organization> orgDetails= OrgRepo.findByEmail(email);
+			 
+			 if(orgDetails.isEmpty()) {
+				 response.put("success",false);
+				 response.put("loggedIn", false);
+				 response.put("message", "Invalid Email");
+				 return ResponseEntity.badRequest().body(response);
+			 }
+			 
+			 Organization organization=orgDetails.get();
+			 
+			 if (!organization.getPassword().equals(password)) {
+
+		            response.put("success", false);
+		            response.put("loggedIn", false);
+		            response.put("message", "Invalid Password");
+
+		            return ResponseEntity.badRequest().body(response);
+		        }
+			 
+			 response.put("success", true);
+			 response.put("loggedIn", true);
+		        response.put("role", "organization");
+		        response.put("organizationId", organization.getOrgid());
+		        response.put("name", organization.getName());
+		        response.put("email", organization.getEmail());
+		        response.put("message", "Login Successful");
+
+		        return ResponseEntity.ok(response);
+			 
+			 
+		 }
+		 if ("admin".equalsIgnoreCase(domain)) {
+
+			    if (adminEmail.equals(email)
+			            && adminPassword.equals(password)) {
+
+			        response.put("success", true);
+			        response.put("loggedIn", true);
+			        response.put("role", "admin");
+			        response.put("message", "Login Successful");
+
+			        return ResponseEntity.ok(response);
 			    }
-				else if("admin".equalsIgnoreCase(domain)) {
-					if("admin@123".equals(email) && "admin".equals(password)) {
-						return "admin login";
-				}
-				}
-					
-				else if("staff".equalsIgnoreCase(domain)) {
-						StaffOpt =Staffrepo.findByEmail(email);
-						if (StaffOpt.isPresent()) {
-							Staffdetail staff = StaffOpt.get();
-							if(staff.getStatus().equalsIgnoreCase("Approved")) {
-								if (staff.getPassword().equals(password)) {
-									return "staff login";
-								} else {
-									return "Invalid password";
-								}
-							}else if(staff.getStatus().equalsIgnoreCase("Rejected")) {
-								return "Sorry Your Application Has Been Rejected";
-							}else {
-								return "Your Application Is Under Reviewing , Pls Be wait or Try After Sometimes Later";
-							}
-							
-						}else return "Invalid Email";
-					}
-					return "Invalid domain";
-				}
+
+			    response.put("success", false);
+			    response.put("loggedIn", false);
+			    response.put("message", "Invalid Credentials");
+
+			    return ResponseEntity.badRequest().body(response);
+			}
+		response.put("success", false);
+		response.put("loggedIn", false);
+		response.put("message", "Unsupporteed Domain");
+		return ResponseEntity.badRequest().body(response);
+	}
+	
+//	@PostMapping("/logdetails")
+//	 public String logdt(@RequestParam String domain,
+//            @RequestParam String email,
+//            @RequestParam String password) {
+//
+//		Optional<StudentForm> DetailOpt = null;
+//		Optional<Staffdetail> StaffOpt = null;
+//			if ("user".equalsIgnoreCase(domain)) {
+//				DetailOpt=StdRepo.findByEmail(email);
+//				if (DetailOpt.isPresent()) {
+//					StudentForm student = DetailOpt.get();
+//					if(student.getStatus().equalsIgnoreCase("Approved")) {
+//						if (student.getPassword().equals(password)) {
+//							return "student login";
+//						} else {
+//							return "Invalid password";
+//						}
+//					}else if(student.getStatus().equalsIgnoreCase("Rejected")) {
+//						return "Sorry Your Application Has Been Rejected";
+//					}else {
+//						return "Your Application Is Under Reviewing , Pls Be wait or Try After Sometimes Later";
+//					}
+//				}
+//				else return "Invalid Email";
+//				
+//			    }
+//				else if("admin".equalsIgnoreCase(domain)) {
+//					if("admin@123".equals(email) && "admin".equals(password)) {
+//						return "admin login";
+//				}
+//				}
+//					
+//				else if("staff".equalsIgnoreCase(domain)) {
+//						StaffOpt =Staffrepo.findByEmail(email);
+//						if (StaffOpt.isPresent()) {
+//							Staffdetail staff = StaffOpt.get();
+//							if(staff.getStatus().equalsIgnoreCase("Approved")) {
+//								if (staff.getPassword().equals(password)) {
+//									return "staff login";
+//								} else {
+//									return "Invalid password";
+//								}
+//							}else if(staff.getStatus().equalsIgnoreCase("Rejected")) {
+//								return "Sorry Your Application Has Been Rejected";
+//							}else {
+//								return "Your Application Is Under Reviewing , Pls Be wait or Try After Sometimes Later";
+//							}
+//							
+//						}else return "Invalid Email";
+//					}
+//					return "Invalid domain";
+//				}
 
 	@PostMapping("/SaveStaffDetail")
 	public String staffdet(@RequestBody Staffdetail staffdetail) {

@@ -11,31 +11,60 @@ public class StudentForm {
 		@GeneratedValue(strategy = GenerationType.SEQUENCE)
 		private Integer sid;
 	
+//		 const [signup,setSignUp]=useState({
+//	            domain:"student",
+//	            firstname:"",
+//	            lastname:"",
+//	            email:"",
+//	            phone:0,
+//	            dob:"",
+//	            date:"",
+//	            dept:"",
+//	            currentyear:0,
+//	            parentname:"",
+//	            parentmobile:0,
+//	            address:"",
+//	            pincode:0,
+//	            password:"",
+//	            bordingpoint:"",
+//	            organization:""
+//	        })
+		private String domain;
 		private String firstname;
 		private String lastname;
-		private String dob;
-		private String joindate;
-		private String dept;
-		private int year;
-		private long mobileno;
 		private String email;
+		private String dob;
+		private long phone;
+		private String date;
+		private String dept;
+		private int currentyear;
 		private String parentname;
-		private long parentno;
-		private String bording;
+		private long parentmobile;
+		private String address;
 		private long pincode;
 		private String password;
-		private String confirmpassword;
-		private String note;
+		private String bordingpoint;
+		private String organization;
 		private String status;
 		
-		public int getSid() {
-			return sid;
-		}
+
 		public String getStatus() {
 			return status;
 		}
+
 		public void setStatus(String status) {
 			this.status = status;
+		}
+
+		public Integer getSid() {
+			return sid;
+		}
+		
+		public String getDomain() {
+			return domain;
+		}
+		public void setDomain(String domain) {
+			this.domain = domain;
 		}
 		public String getFirstname() {
 			return firstname;
@@ -49,17 +78,29 @@ public class StudentForm {
 		public void setLastname(String lastname) {
 			this.lastname = lastname;
 		}
+		public String getEmail() {
+			return email;
+		}
+		public void setEmail(String email) {
+			this.email = email;
+		}
 		public String getDob() {
 			return dob;
 		}
 		public void setDob(String dob) {
 			this.dob = dob;
 		}
-		public String getJoindate() {
-			return joindate;
+		public long getPhone() {
+			return phone;
 		}
-		public void setJoindate(String joindate) {
-			this.joindate = joindate;
+		public void setPhone(long phone) {
+			this.phone = phone;
+		}
+		public String getDate() {
+			return date;
+		}
+		public void setDate(String date) {
+			this.date = date;
 		}
 		public String getDept() {
 			return dept;
@@ -67,23 +108,11 @@ public class StudentForm {
 		public void setDept(String dept) {
 			this.dept = dept;
 		}
-		public int getYear() {
-			return year;
+		public int getCurrentyear() {
+			return currentyear;
 		}
-		public void setYear(int year) {
-			this.year = year;
-		}
-		public long getMobileno() {
-			return mobileno;
-		}
-		public void setMobileno(long mobileno) {
-			this.mobileno = mobileno;
-		}
-		public String getEmail() {
-			return email;
-		}
-		public void setEmail(String email) {
-			this.email = email;
+		public void setCurrentyear(int currentyear) {
+			this.currentyear = currentyear;
 		}
 		public String getParentname() {
 			return parentname;
@@ -91,17 +120,17 @@ public class StudentForm {
 		public void setParentname(String parentname) {
 			this.parentname = parentname;
 		}
-		public long getParentno() {
-			return parentno;
+		public long getParentmobile() {
+			return parentmobile;
 		}
-		public void setParentno(long parentno) {
-			this.parentno = parentno;
+		public void setParentmobile(long parentmobile) {
+			this.parentmobile = parentmobile;
 		}
-		public String getBording() {
-			return bording;
+		public String getAddress() {
+			return address;
 		}
-		public void setBording(String bording) {
-			this.bording = bording;
+		public void setAddress(String address) {
+			this.address = address;
 		}
 		public long getPincode() {
 			return pincode;
@@ -115,41 +144,46 @@ public class StudentForm {
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		public String getConfirmpassword() {
-			return confirmpassword;
+		public String getBordingpoint() {
+			return bordingpoint;
 		}
-		public void setConfirmpassword(String confirmpassword) {
-			this.confirmpassword = confirmpassword;
+		public void setBordingpoint(String bordingpoint) {
+			this.bordingpoint = bordingpoint;
 		}
-		public String getNote() {
-			return note;
+		public String getOrganization() {
+			return organization;
 		}
-		public void setNote(String note) {
-			this.note = note;
+		public void setOrganization(String organization) {
+			this.organization = organization;
 		}
-		public StudentForm(String firstname, String lastname, String dob, String joindate, String dept, int year,
-				long mobileno, String email, String parentname, long parentno, String bording, long pincode,
-				String password, String confirmpassword, String note ,String status) {
+
+		public StudentForm(String domain, String firstname, String lastname, String email, String dob, long phone,
+				String date, String dept, int currentyear, String parentname, long parentmobile, String address,
+				long pincode, String password, String bordingpoint, String organization, String status) {
 			super();
+			this.domain = domain;
 			this.firstname = firstname;
 			this.lastname = lastname;
-			this.dob = dob;
-			this.joindate = joindate;
-			this.dept = dept;
-			this.year = year;
-			this.mobileno = mobileno;
 			this.email = email;
+			this.dob = dob;
+			this.phone = phone;
+			this.date = date;
+			this.dept = dept;
+			this.currentyear = currentyear;
 			this.parentname = parentname;
-			this.parentno = parentno;
-			this.bording = bording;
+			this.parentmobile = parentmobile;
+			this.address = address;
 			this.pincode = pincode;
 			this.password = password;
-			this.confirmpassword = confirmpassword;
-			this.note = note;
-			this.status=status;
+			this.bordingpoint = bordingpoint;
+			this.organization = organization;
+			this.status = status;
 		}
+		
 		public StudentForm() {
 			
+		}
+		
 		}
 		
 		
@@ -168,4 +202,3 @@ public class StudentForm {
 //     password:"",
 //     confirmpassword:"",
 //     note:"unchecked"
-}

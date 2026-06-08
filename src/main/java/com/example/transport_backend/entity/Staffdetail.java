@@ -12,114 +12,168 @@ public class Staffdetail {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 
+	private String domain;
 	private String firstname;
 	private String lastname;
 	private String email;
-	private long mobile;
-	private String dept;
-	private String role;
+	private long phone;
 	private String empid;
-	private String password;
-	private String confirmpassword;
+	private String orgid;
+	private String role;
+	private String dept;
 	private String transportrole;
+	private String password;
 	private String status;
-//	 firstname:"",
-//     lastname:"",
-//     email:"",
-//     mobile:0,
-//     dept:"",
-//     role:"",
-//     empid:"",
-//     password:"",
-//     confirmpassword:"",
-//     transportrole:""
+
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	
+
+
+
+	public String getDomain() {
+		return domain;
+	}
+
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+
 	public String getFirstname() {
 		return firstname;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
+
+
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
+
+
 	public String getLastname() {
 		return lastname;
 	}
+
+
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+
+
 	public String getEmail() {
 		return email;
 	}
+
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public long getMobile() {
-		return mobile;
+
+
+	public long getPhone() {
+		return phone;
 	}
-	public void setMobile(long mobile) {
-		this.mobile = mobile;
+
+
+	public void setPhone(long phone) {
+		this.phone = phone;
 	}
-	public String getDept() {
-		return dept;
-	}
-	public void setDept(String dept) {
-		this.dept = dept;
-	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
+
+
 	public String getEmpid() {
 		return empid;
 	}
+
+
 	public void setEmpid(String empid) {
 		this.empid = empid;
 	}
-	public String getPassword() {
-		return password;
+
+
+	public String getOrgid() {
+		return orgid;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+
+
+	public void setOrgid(String orgid) {
+		this.orgid = orgid;
 	}
-	public String getConfirmpassword() {
-		return confirmpassword;
+
+
+	public String getRole() {
+		return role;
 	}
-	public void setConfirmpassword(String confirmpassword) {
-		this.confirmpassword = confirmpassword;
+
+
+	public void setRole(String role) {
+		this.role = role;
 	}
+
+
+	public String getDept() {
+		return dept;
+	}
+
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+
 	public String getTransportrole() {
 		return transportrole;
 	}
+
+
 	public void setTransportrole(String transportrole) {
 		this.transportrole = transportrole;
 	}
-	public Staffdetail(String firstname, String lastname, String email, long mobile, String dept, String role,
-			String empid, String password, String confirmpassword, String transportrole,String status) {
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	
+
+	public Staffdetail(Integer id, String domain, String firstname, String lastname, String email, long phone,
+			String empid, String orgid, String role, String dept, String transportrole, String password,
+			String status) {
 		super();
+		this.id = id;
+		this.domain = domain;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
-		this.mobile = mobile;
-		this.dept = dept;
-		this.role = role;
+		this.phone = phone;
 		this.empid = empid;
-		this.password = password;
-		this.confirmpassword = confirmpassword;
+		this.orgid = orgid;
+		this.role = role;
+		this.dept = dept;
 		this.transportrole = transportrole;
-		this.status=status;
+		this.password = password;
+		this.status = status;
 	}
-	
+
+
+
 	public Staffdetail() {
 		
 	}
