@@ -8,27 +8,9 @@ import jakarta.persistence.Id;
 @Entity
 public class StudentForm {
 		@Id
-		@GeneratedValue(strategy = GenerationType.SEQUENCE)
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Integer sid;
 	
-//		 const [signup,setSignUp]=useState({
-//	            domain:"student",
-//	            firstname:"",
-//	            lastname:"",
-//	            email:"",
-//	            phone:0,
-//	            dob:"",
-//	            date:"",
-//	            dept:"",
-//	            currentyear:0,
-//	            parentname:"",
-//	            parentmobile:0,
-//	            address:"",
-//	            pincode:0,
-//	            password:"",
-//	            bordingpoint:"",
-//	            organization:""
-//	        })
 		private String domain;
 		private String firstname;
 		private String lastname;

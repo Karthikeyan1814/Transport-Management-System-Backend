@@ -11,7 +11,7 @@ import com.example.transport_backend.entity.StudentForm;
 public interface StudentRepo extends JpaRepository<StudentForm, Integer>{
 
 
-    Optional<StudentForm> findByEmail(String email);
+    StudentForm findByEmail(String email);
 		
 	
 }
