@@ -3,7 +3,8 @@ package com.example.transport_backend.config;
 import org.springframework.context.annotation.*;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.*;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -30,7 +31,8 @@ public class SecurityConfig {
 
 				.authorizeHttpRequests(auth -> {
 
-					auth.requestMatchers("/auth/login").permitAll();
+					auth.requestMatchers("/auth/login","/Signup/saveStudent","/Signup/saveStaff","/Signup/saveOrganization","/RouteX"
+							,"/ManageBus/saveBus","/ManageMessage/sendImpMessage","/ManageBus/saveBus","/ManageBus/getBus","/Staff/saveStaff","/ManageBus/RequestLocation","/Staff/saveIncharge","/Organization/saveOrganization").permitAll();
 
 					auth.anyRequest().authenticated();
 
@@ -40,6 +42,11 @@ public class SecurityConfig {
 
 				.build();
 
+	}
+	
+	@Bean
+	PasswordEncoder passwordencoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }

@@ -1,9 +1,17 @@
 package com.example.transport_backend.entity;
 
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 
 @Entity
 public class StudentForm {
@@ -16,16 +24,71 @@ public class StudentForm {
 		private String lastname;
 		private String email;
 		private String dob;
-		private long phone;
+		private String phone;
 		private String date;
 		private String dept;
 		private int currentyear;
 		private String parentname;
-		private long parentmobile;
+		private String parentmobile;
 		private String address;
-		private long pincode;
+		private String pincode;
+		@JsonIgnore
 		private String password;
 		private String bordingpoint;
+		
+		@Transient
+		private int orgId;
+		@Transient
+		private int busId;
+		
+		@ManyToOne
+		@JoinColumn(name= "org_id")
+		@JsonBackReference("org")
+		private Organization org;
+		
+
+		 @ManyToOne
+		 @JoinColumn(name="bus_id")
+		 @JsonBackReference("student")
+		 private Bus bus;
+		 
+		public Bus getBus() {
+			return bus;
+		}
+
+		
+		 public int getOrgId() {
+			return orgId;
+		}
+
+
+		public void setOrgId(int orgId) {
+			this.orgId = orgId;
+		}
+
+
+		public int getBusId() {
+			return busId;
+		}
+
+
+		public void setBusId(int busId) {
+			this.busId = busId;
+		}
+
+
+		 public Organization getOrg() {
+				return org;
+			}
+
+			public void setOrg(Organization org) {
+				this.org = org;
+			}
+			
+		 public void setBus(Bus bus) {
+			 this.bus = bus;
+		 }
+
 		private String organization;
 		private String status;
 		
@@ -72,12 +135,7 @@ public class StudentForm {
 		public void setDob(String dob) {
 			this.dob = dob;
 		}
-		public long getPhone() {
-			return phone;
-		}
-		public void setPhone(long phone) {
-			this.phone = phone;
-		}
+		
 		public String getDate() {
 			return date;
 		}
@@ -102,36 +160,20 @@ public class StudentForm {
 		public void setParentname(String parentname) {
 			this.parentname = parentname;
 		}
-		public long getParentmobile() {
-			return parentmobile;
-		}
-		public void setParentmobile(long parentmobile) {
-			this.parentmobile = parentmobile;
-		}
-		public String getAddress() {
+				public String getAddress() {
 			return address;
 		}
 		public void setAddress(String address) {
 			this.address = address;
 		}
-		public long getPincode() {
-			return pincode;
-		}
-		public void setPincode(long pincode) {
-			this.pincode = pincode;
-		}
+		
 		public String getPassword() {
 			return password;
 		}
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		public String getBordingpoint() {
-			return bordingpoint;
-		}
-		public void setBordingpoint(String bordingpoint) {
-			this.bordingpoint = bordingpoint;
-		}
+	
 		public String getOrganization() {
 			return organization;
 		}
@@ -139,9 +181,47 @@ public class StudentForm {
 			this.organization = organization;
 		}
 
-		public StudentForm(String domain, String firstname, String lastname, String email, String dob, long phone,
-				String date, String dept, int currentyear, String parentname, long parentmobile, String address,
-				long pincode, String password, String bordingpoint, String organization, String status) {
+		
+		public String getPhone() {
+			return phone;
+		}
+
+		public void setPhone(String phone) {
+			this.phone = phone;
+		}
+
+		public String getParentmobile() {
+			return parentmobile;
+		}
+
+		public void setParentmobile(String parentmobile) {
+			this.parentmobile = parentmobile;
+		}
+
+		public String getPincode() {
+			return pincode;
+		}
+
+		public void setPincode(String pincode) {
+			this.pincode = pincode;
+		}
+
+		public String getBordingpoint() {
+			return bordingpoint;
+		}
+
+		public void setBordingpoint(String bordingpoint) {
+			this.bordingpoint = bordingpoint;
+		}
+
+		public StudentForm() {
+			
+		}
+
+		public StudentForm(String domain, String firstname, String lastname, String email, String dob, String phone,
+				String date, String dept, int currentyear, String parentname, String parentmobile, String address,
+				String pincode, String password, String bordingpoint, Organization org, Bus bus, String organization,
+				String status) {
 			super();
 			this.domain = domain;
 			this.firstname = firstname;
@@ -158,13 +238,12 @@ public class StudentForm {
 			this.pincode = pincode;
 			this.password = password;
 			this.bordingpoint = bordingpoint;
+			this.org = org;
+			this.bus = bus;
 			this.organization = organization;
 			this.status = status;
 		}
 		
-		public StudentForm() {
-			
-		}
 		
 		}
 		

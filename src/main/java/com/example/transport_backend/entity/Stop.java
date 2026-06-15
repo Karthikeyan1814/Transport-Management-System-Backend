@@ -18,7 +18,7 @@ public class Stop {
 
     @ManyToOne
     @JoinColumn(name="route_id")
-    @JsonBackReference
+    @JsonBackReference("stops")
     private BusRoute route;
 
     public Stop(){}

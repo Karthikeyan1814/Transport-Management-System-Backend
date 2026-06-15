@@ -3,6 +3,7 @@ package com.example.transport_backend.controller;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +20,16 @@ public class AuthController {
 
     private final StudentRepo studentRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordencoder;
 
     public AuthController(
             StudentRepo studentRepository,
-            JwtUtil jwtUtil
+            JwtUtil jwtUtil,
+            PasswordEncoder encoder
     ) {
         this.studentRepository = studentRepository;
         this.jwtUtil = jwtUtil;
+        this.passwordencoder=encoder;
     }
 
     @PostMapping("/login")
@@ -46,14 +50,18 @@ public class AuthController {
                     .body("User Not Found");
         }
 
-        if (!student.getPassword()
-                .equals(
-                        request.getPassword()
-                )) {
+        if (!passwordencoder.matches(request.getPassword(),student.getPassword())) { ////matches(rawPassword, encodedPassword)
 
             return ResponseEntity
                     .badRequest()
-                    .body("Invalid Password");
+                    .body("Invalid Username or Password");
+        }
+        
+        if (!student.getStatus().equals("Approved")) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body("Your Are Not Approved Yet , Please Be Wait : )");
         }
 
         String token =

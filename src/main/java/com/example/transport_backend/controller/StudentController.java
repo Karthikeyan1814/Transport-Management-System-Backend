@@ -13,12 +13,31 @@ public class StudentController {
 
     @GetMapping("/profile")
     public Object profile(
-
-            @AuthenticationPrincipal
+    		//with AuthenticationPrinciple annotation 
+    		
+            @AuthenticationPrincipal   // this is security context holder like it have the current user details 
             CustomUserDetails user
-
+//@AuthenticationPrincipal is simply a shortcut that grabs the Principal from the current authenticated request and injects it into your controller method. 🚀
+            
     ) {
 
         return user.getStudent();
-    }
-}
+    }}
+    
+    
+    // without authentication
+   // Authentication auth =
+//
+//    		SecurityContextHolder
+//    		.getContext()
+//    		.getAuthentication();
+//
+//    		CustomUserDetails user =
+//
+//    		(CustomUserDetails)
+//    		auth.getPrincipal();
+//
+//    		return user.getStudent();
+//}
+
+    		

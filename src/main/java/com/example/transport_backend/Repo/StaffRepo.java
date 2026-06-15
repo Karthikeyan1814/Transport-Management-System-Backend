@@ -11,5 +11,5 @@ import com.example.transport_backend.entity.Staffdetail;
 @Repository
 public interface StaffRepo extends JpaRepository<Staffdetail, Integer>{
 
-	 Optional<Staffdetail> findByEmail(String Email) ;
+	 Staffdetail findByEmail(String Email) ;
 }

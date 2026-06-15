@@ -25,8 +25,7 @@ import java.util.List;
 @Component
 public class JwtFilter extends GenericFilterBean{
 
-	  @Autowired
-	    private CustomUserDetailsService customUserDetailsService;
+
 
 	    @Autowired
 	    private JwtUtil jwtUtil;
@@ -49,7 +48,7 @@ public class JwtFilter extends GenericFilterBean{
 
         String authHeader=
                 req.getHeader(
-                        "Authorization"
+                		"Authorization"
                 );
 
         System.out.println("AUTH HEADER = " + authHeader);
@@ -78,21 +77,25 @@ public class JwtFilter extends GenericFilterBean{
                 		.loadUserByUsername(
                 		username
                 		);
+                /// Now actually the UserDetails Service is executed (CustomUserDetailService) 
+                		/// is executed so in that method it check the user details is actually present or not
+                		/// if it present it return the userDetails object other wise it return user not found 
 
+                
                 UsernamePasswordAuthenticationToken
                 authentication=
 
                 new
                 UsernamePasswordAuthenticationToken(
 
-                userDetails,
+                userDetails, // this is the principle of authentication //auth.getPrincipal() like later so we can access by creating the @AuthendicationPrinciple
 
                 null,
 
                 userDetails
                 .getAuthorities()
 
-                );
+                ); /// its act like a card it hold the userDetails like userName, password and authorities 
 
 
                 SecurityContextHolder
@@ -100,7 +103,7 @@ public class JwtFilter extends GenericFilterBean{
 
                         .setAuthentication(
                                 authentication
-                        );
+                        ); /// now the spring know who is the current request holder like we store current user into this spring  and store this object in spring 
 
             }
             catch(Exception e){
@@ -117,7 +120,7 @@ public class JwtFilter extends GenericFilterBean{
         chain.doFilter(
                 request,
                 response
-        );
+        ); // passing the request to next filters and controller
 
     }
 }

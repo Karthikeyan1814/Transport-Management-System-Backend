@@ -37,7 +37,7 @@ public class CustomUserDetails implements UserDetails {
 				new SimpleGrantedAuthority(
 						"ROLE_"+student.getDomain())
 				);
-	}
+	} // this method return the role of the user 
 	@Override
 	public boolean
 	isAccountNonExpired(){

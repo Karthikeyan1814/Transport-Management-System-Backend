@@ -16,9 +16,7 @@ public class StudentReport {
     @Column(length = 50)
     private String role;          // e.g. "student"
 
-    @Column(length = 50)
-    private String fromRole;      // duplicate of role / for flexibility
-
+    
     @Column(length = 255)
     private String senderEmail;
 
@@ -36,14 +34,7 @@ public class StudentReport {
 
     private LocalDateTime createdAt;
 
-    // Store image as bytes (simple option). You can later switch to disk path/URL if you prefer.
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] image;
-
-    @Column(length = 100)
-    private String imageContentType;
-
+   
     // --- getters & setters ---
 
     public Long getId() { return id; }
@@ -52,9 +43,7 @@ public class StudentReport {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 
-    public String getFromRole() { return fromRole; }
-    public void setFromRole(String fromRole) { this.fromRole = fromRole; }
-
+   
     public String getSenderEmail() { return senderEmail; }
     public void setSenderEmail(String senderEmail) { this.senderEmail = senderEmail; }
 
@@ -73,9 +62,4 @@ public class StudentReport {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public byte[] getImage() { return image; }
-    public void setImage(byte[] image) { this.image = image; }
-
-    public String getImageContentType() { return imageContentType; }
-    public void setImageContentType(String imageContentType) { this.imageContentType = imageContentType; }
-}
+  }

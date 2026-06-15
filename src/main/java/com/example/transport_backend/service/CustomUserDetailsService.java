@@ -24,6 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 			throw new UsernameNotFoundException("User Name Not Found");
 		}
 		return new CustomUserDetails(student);
-	}
+	} //this method is check the user is actually present or not 
+	//if it present it return the data other wise it return 404 or user name not found
+	// This method is called by (JWTFilter)
 	
 }

@@ -8,5 +8,5 @@ import com.example.transport_backend.entity.Organization;
 
 public interface OrganizationRepo extends JpaRepository<Organization, Integer> {
 
-	Optional <Organization> findByEmail(String email);
+	Organization findByEmail(String email);
 }
