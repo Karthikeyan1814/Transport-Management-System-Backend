@@ -2,15 +2,21 @@ package com.example.transport_backend.entity;
 
 
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -32,7 +38,7 @@ public class StudentForm {
 		private String parentmobile;
 		private String address;
 		private String pincode;
-		@JsonIgnore
+		@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 		private String password;
 		private String bordingpoint;
 		
@@ -52,6 +58,22 @@ public class StudentForm {
 		 @JsonBackReference("student")
 		 private Bus bus;
 		 
+		 @OneToMany(mappedBy = "student")
+		 @JsonManagedReference("std-location")
+		 private List<Location>location;
+		 
+		
+
+		public List<Location> getLocation() {
+			return location;
+		}
+
+
+		 public void setLocation(List<Location> location) {
+			 this.location = location;
+		 }
+
+
 		public Bus getBus() {
 			return bus;
 		}
@@ -99,6 +121,20 @@ public class StudentForm {
 
 		public void setStatus(String status) {
 			this.status = status;
+		}
+		
+		@JsonProperty("busNumber")
+		public String getBusNumber() {
+		    return bus != null ? bus.getBusNumber() : null;
+		}
+		@JsonProperty("organizationName")
+		public String getOrganizationName() {
+		    return org != null ? org.getName() : null;
+		}
+		
+		@JsonProperty("routesDetails")
+		public Object getBusStops(){
+			return bus!=null ? bus.getRoute():null;
 		}
 
 		public Integer getSid() {
@@ -218,10 +254,11 @@ public class StudentForm {
 			
 		}
 
+
 		public StudentForm(String domain, String firstname, String lastname, String email, String dob, String phone,
 				String date, String dept, int currentyear, String parentname, String parentmobile, String address,
-				String pincode, String password, String bordingpoint, Organization org, Bus bus, String organization,
-				String status) {
+				String pincode, String password, String bordingpoint, int orgId, int busId, Organization org, Bus bus,
+				List<Location> location, String organization, String status) {
 			super();
 			this.domain = domain;
 			this.firstname = firstname;
@@ -238,11 +275,18 @@ public class StudentForm {
 			this.pincode = pincode;
 			this.password = password;
 			this.bordingpoint = bordingpoint;
+			this.orgId = orgId;
+			this.busId = busId;
 			this.org = org;
 			this.bus = bus;
+			this.location = location;
 			this.organization = organization;
 			this.status = status;
 		}
+
+
+	
+	
 		
 		
 		}

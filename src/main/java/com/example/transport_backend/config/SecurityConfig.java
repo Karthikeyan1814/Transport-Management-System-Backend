@@ -1,7 +1,7 @@
 package com.example.transport_backend.config;
 
 import org.springframework.context.annotation.*;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +31,8 @@ public class SecurityConfig {
 
 				.authorizeHttpRequests(auth -> {
 
+					auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+				    .permitAll();
 					auth.requestMatchers("/auth/login","/Signup/saveStudent","/Signup/saveStaff","/Signup/saveOrganization","/RouteX"
 							,"/ManageBus/saveBus","/ManageMessage/sendImpMessage","/ManageBus/saveBus","/ManageBus/getBus","/Staff/saveStaff","/ManageBus/RequestLocation","/Staff/saveIncharge","/Organization/saveOrganization").permitAll();
 

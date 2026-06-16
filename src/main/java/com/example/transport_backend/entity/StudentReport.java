@@ -33,11 +33,22 @@ public class StudentReport {
     private boolean resolved = false;
 
     private LocalDateTime createdAt;
+    
+
+    @ManyToOne
+    @JoinColumn(name = "org_id")
+    private Organization organization;
 
    
     // --- getters & setters ---
 
-    public Long getId() { return id; }
+    public Organization getOrganization() {
+		return organization;
+	}
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
+	}
+	public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getRole() { return role; }

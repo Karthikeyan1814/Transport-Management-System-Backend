@@ -26,6 +26,16 @@ public class Organization {
 	private String pincode;
 	private String phone;
 	private String email;
+	private String role;
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@JsonIgnore
 	private String password;
 	
@@ -41,8 +51,21 @@ public class Organization {
 	@JsonManagedReference("org-bus")
 	private List<Bus> bus;
 	
+	@OneToMany(mappedBy = "organization")
+ @JsonManagedReference("org-location")
+	private List<Location> location;
+	
 	public List<Staffdetail> getStaff() {
 		return staff;
+	}
+
+	
+	public List<Location> getLocation() {
+		return location;
+	}
+
+	public void setLocation(List<Location> location) {
+		this.location = location;
 	}
 
 	public List<Bus> getBus() {
@@ -144,8 +167,11 @@ public class Organization {
 	}
 
 	
+	
+
 	public Organization(String name, String type, String founderName, String university, String address, String pincode,
-			String phone, String email, String password, List<StudentForm> std, List<Staffdetail> staff, List<Bus> bus) {
+			String phone, String email, String role, String password, List<StudentForm> std, List<Staffdetail> staff,
+			List<Bus> bus) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -155,6 +181,7 @@ public class Organization {
 		this.pincode = pincode;
 		this.phone = phone;
 		this.email = email;
+		this.role = role;
 		this.password = password;
 		this.std = std;
 		this.staff = staff;

@@ -6,9 +6,11 @@ import com.example.transport_backend.entity.StudentReport;
 
 public interface StudentReportRepository extends JpaRepository<StudentReport, Integer> {
 
-    List<StudentReport> findByTargetIgnoreCase(String target);
+	 List<StudentReport> findBySenderEmail(String senderEmail);
 
-    List<StudentReport> findByResolved(Boolean resolved);
+	    List<StudentReport> findByTarget(String target);
 
-    List<StudentReport> findByTargetIgnoreCaseAndResolved(String target, Boolean resolved);
+	    List<StudentReport> findByResolved(boolean resolved);
+	    
+	    List<StudentReport> findByOrganization_Id(Integer orgId);
 }

@@ -4,12 +4,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
@@ -33,6 +35,11 @@ public class Staffdetail {
 	private String password;
 	private String status;
 
+	@OneToMany(mappedBy = "staff")
+	@JsonManagedReference("staff-location")
+	private List<Location> location;
+	
+	
 	@ManyToOne
 	@JoinColumn(name="org_id")
 	@JsonBackReference("org-staff")
@@ -40,6 +47,16 @@ public class Staffdetail {
 	
 	public Integer getId() {
 		return id;
+	}
+
+
+	public List<Location> getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(List<Location> location) {
+		this.location = location;
 	}
 
 

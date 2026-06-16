@@ -20,7 +20,7 @@ public class SampleConfig {
 	
 	@Bean
 	SecurityFilterChain securityfilterchain(HttpSecurity http) {
-		return http.csrf(csrf -> csrf.disable())
+		return http .cors(cors -> {}).csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth ->{
 					auth.requestMatchers("/signin").permitAll();
 					auth.anyRequest().authenticated();

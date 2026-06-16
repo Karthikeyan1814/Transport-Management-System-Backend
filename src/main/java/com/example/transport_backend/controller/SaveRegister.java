@@ -49,11 +49,13 @@ public class SaveRegister {
 		Map<String,Object> response=new HashMap<>();
 		try {
 			std.setPassword(passwordencoder.encode(std.getPassword()));
+			
 			Organization org=OrgRepo.findById(std.getOrgId()).orElseThrow();
 			std.setOrg(org);
 			Bus bus=busRepo.findById(std.getBusId()).orElseThrow();
 			std.setBus(bus);
 			StdRepo.save(std);
+			System.out.print(std.getPassword());
 		}catch(Error e) {
 			response.put("error",e);
 			return ResponseEntity.badRequest().body(response);

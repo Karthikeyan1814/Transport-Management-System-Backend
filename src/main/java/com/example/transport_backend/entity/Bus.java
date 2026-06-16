@@ -39,7 +39,7 @@ public class Bus {
 	private BusIncharge busincharge;
 	
 	@OneToMany(mappedBy = "bus",cascade = CascadeType.ALL)
-	@JsonIgnore
+	@JsonManagedReference("student")
 	private List<StudentForm> studentdetails;
 	
 	@OneToMany(mappedBy="bus",cascade=CascadeType.ALL)
@@ -49,7 +49,7 @@ public class Bus {
 	
 	@ManyToOne
 	@JoinColumn(name="orgid")
-	@JsonIgnore
+	@JsonBackReference("org-bus")
 	private Organization org;
 	
 	public long getBusId() {

@@ -16,16 +16,21 @@ public class JwtUtil {
 	Key key=Keys.hmacShaKeyFor(SECRET.getBytes());
 	
 	
-	public String generateToken(String username, String role) {
-		return Jwts.builder().setSubject(username).setIssuedAt( new Date()).setExpiration( new Date(System.currentTimeMillis()+86400000))
+	public String generateToken(String username, String role ,Integer id) {
+		return Jwts.builder().setSubject(username).claim("role", role).claim("id", id).setIssuedAt( new Date()).setExpiration( new Date(System.currentTimeMillis()+86400000))
 				.signWith(key,SignatureAlgorithm.HS256).compact();
 	}
 	public String extractUsername(String token) {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
 	}
 	
+	public String extractRole(String token) {
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role",String.class);
+	}
 	
-	
+	public Integer extractId(String token) {
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("id",Integer.class);
+	}
 	
 	// bellow to methods is need to call in jwt filter but already paresejwtclaims check all verficitation so bellow method is just useless
 	
